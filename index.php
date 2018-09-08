@@ -196,6 +196,13 @@ Session::put('locale', WT_LOCALE);
 
 DebugBar::stopMeasure('init i18n');
 
+
+// Set up database connection (requires I18N to be initialized)
+new \Fisharebest\Webtrees\Model\Database(
+    parse_ini_file(WT_ROOT . 'data/config.ini.php')
+);
+
+
 // Note that the database/webservers may not be synchronised, so use DB time throughout.
 define('WT_TIMESTAMP', (int) Database::prepare("SELECT UNIX_TIMESTAMP()")->fetchOne());
 

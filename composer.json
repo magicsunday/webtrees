@@ -33,6 +33,7 @@
         "fisharebest/ext-calendar": "~2.3",
         "fisharebest/localization": "~1.10",
         "guzzlehttp/guzzle": "~6.0",
+        "illuminate/database": "^5.5",
         "league/commonmark": "~0.17",
         "league/flysystem": "~1.0",
         "league/flysystem-ziparchive": "~1.0",

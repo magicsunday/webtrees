@@ -16,10 +16,11 @@
 namespace Fisharebest\Webtrees\Module;
 
 use Fisharebest\Webtrees\Auth;
-use Fisharebest\Webtrees\Database;
 use Fisharebest\Webtrees\Functions\FunctionsPrintLists;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Model\Name;
 use Fisharebest\Webtrees\Tree;
+use Illuminate\Database\Query\Expression;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -72,29 +73,29 @@ class TopSurnamesModule extends AbstractModule implements ModuleBlockInterface
 
         extract($cfg, EXTR_OVERWRITE);
 
-         // Use the count of base surnames.
-        $top_surnames = Database::prepare(
-            "SELECT n_surn FROM `##name`" .
-            " WHERE n_file = :tree_id AND n_type != '_MARNM' AND n_surn NOT IN ('@N.N.', '')" .
-            " GROUP BY n_surn" .
-            " ORDER BY COUNT(n_surn) DESC" .
-            " LIMIT :limit"
-        )->execute([
-            'tree_id' => $tree->getTreeId(),
-            'limit'   => $num,
-        ])->fetchOneColumn();
+        $top_surnames = Name::query()
+            ->select(['n_surn'])
+            ->where('n_file', '=', $tree->getTreeId())
+            ->where('n_type', '!=', '_MARNM')
+            ->whereNotIn('n_surn', ['@N.N.', ''])
+            ->groupBy(['n_surn'])
+            ->orderByDesc(new Expression('count(n_surn)'))
+            ->limit($num)
+            ->get(['n_surn']);
 
         $all_surnames = [];
         foreach ($top_surnames as $top_surname) {
-            $variants = Database::prepare(
-                "SELECT n_surname COLLATE utf8_bin, COUNT(*) FROM `##name` WHERE n_file = :tree_id AND n_surn COLLATE :collate = :surname GROUP BY 1"
-            )->execute([
-                'collate' => I18N::collation(),
-                'surname' => $top_surname,
-                'tree_id' => $tree->getTreeId(),
-            ])->fetchAssoc();
+            $variants = (new Name())
+                ->setConnection(I18N::collation())
+                ->newQuery()
+                ->select(['n_surname', new Expression('count(*) as count')])
+                ->where('n_file', '=', $tree->getTreeId())
+                ->where('n_surn', '=', $top_surname->n_surn)
+                ->get();
 
-            $all_surnames[$top_surname] = $variants;
+            foreach ($variants as $variant) {
+                $all_surnames[$top_surname->n_surn][$variant->n_surname] = $variant->count;
+            }
         }
 
         switch ($infoStyle) {

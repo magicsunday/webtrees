@@ -39,16 +39,18 @@ function csrf_token()
     return \Fisharebest\Webtrees\Session::getCsrfToken();
 }
 
-/**
- * Escape a string for inclusion within HTML.
- *
- * @param $text
- *
- * @return string
- */
-function e(string $text): string
-{
-    return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+if (! function_exists('e')) {
+    /**
+     * Escape a string for inclusion within HTML.
+     *
+     * @param $text
+     *
+     * @return string
+     */
+    function e(string $text): string
+    {
+        return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+    }
 }
 
 /**
