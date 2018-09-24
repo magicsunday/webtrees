@@ -2117,7 +2117,7 @@ class Stats
             $centuries = '';
             $counts    = [];
             foreach ($rows as $values) {
-                $counts[]  = round(100 * $values->total / $tot, 0);
+                $counts[] = round(100 * $values->total / $tot, 0);
                 $centuries .= $this->centuryName($values->century) . ' - ' . I18N::number((int) $values->total) . '|';
             }
             $chd = $this->arrayToExtendedEncoding($counts);
