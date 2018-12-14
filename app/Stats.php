@@ -1490,6 +1490,9 @@ class Stats
                 'chart_title' => $chart_title,
                 'chart_url'   => $chart_url,
                 'sizes'       => $sizes,
+                'color_from'  => $color_from,
+                'color_to'    => $color_to,
+                'mediaTypes'  => $media,
             ]
         );
     }
