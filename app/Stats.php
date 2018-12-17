@@ -4643,12 +4643,10 @@ class Stats
      * @param string $type
      * @param int    $total
      *
-     * @return string
+     * @return array
      */
-    private function topTenFamilyQuery(string $type, int $total): string
+    private function topTenFamilyQuery(string $type, int $total): array
     {
-        $total = (int) $total;
-
         $rows = $this->runSql(
             "SELECT f_numchil AS tot, f_id AS id" .
             " FROM `##families`" .
@@ -4659,45 +4657,39 @@ class Stats
         );
 
         if (empty($rows)) {
-            return '';
+            return [];
         }
 
         $top10 = [];
         foreach ($rows as $row) {
             $family = Family::getInstance($row->id, $this->tree);
+
             if ($family->canShow()) {
                 $total = (int) $row->tot;
 
-                if ($type === 'list') {
-                    $top10[] = '<li><a href="' . e($family->url()) . '">' . $family->getFullName() . '</a> - ' . I18N::plural('%s child', '%s children', $total, I18N::number($total));
-                } else {
-                    $top10[] = '<a href="' . e($family->url()) . '">' . $family->getFullName() . '</a> - ' . I18N::plural('%s child', '%s children', $total, I18N::number($total));
-                }
+                $top10[] = [
+                    'family' => $family,
+                    'count'  => $total,
+                ];
             }
         }
-        if ($type === 'list') {
-            $top10 = implode('', $top10);
-        } else {
-            $top10 = implode('; ', $top10);
-        }
-        if (I18N::direction() === 'rtl') {
-            $top10 = str_replace([
-                '[',
-                ']',
-                '(',
-                ')',
-                '+',
-            ], [
-                '&rlm;[',
-                '&rlm;]',
-                '&rlm;(',
-                '&rlm;)',
-                '&rlm;+',
-            ], $top10);
-        }
-        if ($type === 'list') {
-            return '<ul>' . $top10 . '</ul>';
-        }
+
+        // TODO
+//        if (I18N::direction() === 'rtl') {
+//            $top10 = str_replace([
+//                '[',
+//                ']',
+//                '(',
+//                ')',
+//                '+',
+//            ], [
+//                '&rlm;[',
+//                '&rlm;]',
+//                '&rlm;(',
+//                '&rlm;)',
+//                '&rlm;+',
+//            ], $top10);
+//        }
 
         return $top10;
     }
@@ -4925,10 +4917,12 @@ class Stats
      * @param string $total
      *
      * @return string
+     *
+     * @deprecated
      */
     public function topTenLargestFamily(string $total = '10'): string
     {
-        return $this->topTenFamilyQuery('nolist', (int) $total);
+//        return $this->topTenFamilyQuery('nolist', (int) $total);
     }
 
     /**
@@ -4936,9 +4930,9 @@ class Stats
      *
      * @param string $total
      *
-     * @return string
+     * @return array
      */
-    public function topTenLargestFamilyList(string $total = '10'): string
+    public function topTenLargestFamilyList(string $total = '10'): array
     {
         return $this->topTenFamilyQuery('list', (int) $total);
     }
@@ -5377,9 +5371,9 @@ class Stats
      * @param string $type
      * @param int    $total
      *
-     * @return string
+     * @return array
      */
-    private function topTenGrandFamilyQuery(string $type, int $total): string
+    private function topTenGrandFamilyQuery(string $type, int $total): array
     {
         $rows = $this->runSql(
             "SELECT COUNT(*) AS tot, f_id AS id" .
@@ -5399,45 +5393,42 @@ class Stats
             " ORDER BY tot DESC" .
             " LIMIT " . $total
         );
+
         if (!isset($rows[0])) {
-            return '';
+            return [];
         }
+
         $top10 = [];
+
         foreach ($rows as $row) {
             $family = Family::getInstance($row->id, $this->tree);
+
             if ($family->canShow()) {
                 $total = (int) $row->tot;
 
-                if ($type === 'list') {
-                    $top10[] = '<li><a href="' . e($family->url()) . '">' . $family->getFullName() . '</a> - ' . I18N::plural('%s grandchild', '%s grandchildren', $total, I18N::number($total));
-                } else {
-                    $top10[] = '<a href="' . e($family->url()) . '">' . $family->getFullName() . '</a> - ' . I18N::plural('%s grandchild', '%s grandchildren', $total, I18N::number($total));
-                }
+                $top10[] = [
+                    'family' => $family,
+                    'count'  => $total,
+                ];
             }
         }
-        if ($type === 'list') {
-            $top10 = implode('', $top10);
-        } else {
-            $top10 = implode('; ', $top10);
-        }
-        if (I18N::direction() === 'rtl') {
-            $top10 = str_replace([
-                '[',
-                ']',
-                '(',
-                ')',
-                '+',
-            ], [
-                '&rlm;[',
-                '&rlm;]',
-                '&rlm;(',
-                '&rlm;)',
-                '&rlm;+',
-            ], $top10);
-        }
-        if ($type === 'list') {
-            return '<ul>' . $top10 . '</ul>';
-        }
+
+        // TODO
+//        if (I18N::direction() === 'rtl') {
+//            $top10 = str_replace([
+//                '[',
+//                ']',
+//                '(',
+//                ')',
+//                '+',
+//            ], [
+//                '&rlm;[',
+//                '&rlm;]',
+//                '&rlm;(',
+//                '&rlm;)',
+//                '&rlm;+',
+//            ], $top10);
+//        }
 
         return $top10;
     }
@@ -5448,10 +5439,12 @@ class Stats
      * @param string $total
      *
      * @return string
+     *
+     * @deprecated
      */
     public function topTenLargestGrandFamily(string $total = '10'): string
     {
-        return $this->topTenGrandFamilyQuery('nolist', (int) $total);
+//        return $this->topTenGrandFamilyQuery('nolist', (int) $total);
     }
 
     /**
@@ -5459,9 +5452,9 @@ class Stats
      *
      * @param string $total
      *
-     * @return string
+     * @return array
      */
-    public function topTenLargestGrandFamilyList(string $total = '10'): string
+    public function topTenLargestGrandFamilyList(string $total = '10'): array
     {
         return $this->topTenGrandFamilyQuery('list', (int) $total);
     }
