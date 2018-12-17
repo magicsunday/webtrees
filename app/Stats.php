@@ -23,6 +23,10 @@ use Fisharebest\Webtrees\Functions\FunctionsPrintLists;
 use Fisharebest\Webtrees\Http\Middleware\PageHitCounter;
 use Fisharebest\Webtrees\Module\FamilyTreeFavoritesModule;
 use Fisharebest\Webtrees\Module\UserFavoritesModule;
+use Fisharebest\Webtrees\Statistics\BirthPlaces;
+use Fisharebest\Webtrees\Statistics\DeathPlaces;
+use Fisharebest\Webtrees\Statistics\MarriagePlaces;
+use Fisharebest\Webtrees\Statistics\Places;
 use PDOException;
 use stdClass;
 use const PREG_SET_ORDER;
@@ -1577,91 +1581,13 @@ class Stats
      * @param bool   $country
      *
      * @return int[]|stdClass[]
+     *
+     * @deprecated Use \Fisharebest\Webtrees\Statistics\Places::statsPlaces instead
      */
     public function statsPlaces($what = 'ALL', $fact = '', $parent = 0, $country = false): array
     {
-        if ($fact) {
-            if ($what == 'INDI') {
-                $rows = Database::prepare(
-                    "SELECT i_gedcom AS ged FROM `##individuals` WHERE i_file = :tree_id AND i_gedcom LIKE '%\n2 PLAC %'"
-                )->execute([
-                    'tree_id' => $this->tree->id(),
-                ])->fetchAll();
-            } elseif ($what == 'FAM') {
-                $rows = Database::prepare(
-                    "SELECT f_gedcom AS ged FROM `##families` WHERE f_file = :tree_id AND f_gedcom LIKE '%\n2 PLAC %'"
-                )->execute([
-                    'tree_id' => $this->tree->id(),
-                ])->fetchAll();
-            }
-            $placelist = [];
-            foreach ($rows as $row) {
-                if (preg_match('/\n1 ' . $fact . '(?:\n[2-9].*)*\n2 PLAC (.+)/', $row->ged, $match)) {
-                    if ($country) {
-                        $tmp   = explode(Place::GEDCOM_SEPARATOR, $match[1]);
-                        $place = end($tmp);
-                    } else {
-                        $place = $match[1];
-                    }
-                    if (!isset($placelist[$place])) {
-                        $placelist[$place] = 1;
-                    } else {
-                        $placelist[$place]++;
-                    }
-                }
-            }
-
-            return $placelist;
-        }
-
-        if ($parent > 0) {
-            // used by placehierarchy googlemap module
-            if ($what == 'INDI') {
-                $join = " JOIN `##individuals` ON pl_file = i_file AND pl_gid = i_id";
-            } elseif ($what == 'FAM') {
-                $join = " JOIN `##families` ON pl_file = f_file AND pl_gid = f_id";
-            } else {
-                $join = "";
-            }
-            $rows = $this->runSql(
-                " SELECT" .
-                " p_place AS place," .
-                " COUNT(*) AS tot" .
-                " FROM" .
-                " `##places`" .
-                " JOIN `##placelinks` ON pl_file=p_file AND p_id=pl_p_id" .
-                $join .
-                " WHERE" .
-                " p_id={$parent} AND" .
-                " p_file={$this->tree->id()}" .
-                " GROUP BY place"
-            );
-
-            return $rows;
-        }
-
-        if ($what == 'INDI') {
-            $join = " JOIN `##individuals` ON pl_file = i_file AND pl_gid = i_id";
-        } elseif ($what == 'FAM') {
-            $join = " JOIN `##families` ON pl_file = f_file AND pl_gid = f_id";
-        } else {
-            $join = "";
-        }
-        $rows = $this->runSql(
-            " SELECT" .
-            " p_place AS country," .
-            " COUNT(*) AS tot" .
-            " FROM" .
-            " `##places`" .
-            " JOIN `##placelinks` ON pl_file=p_file AND p_id=pl_p_id" .
-            $join .
-            " WHERE" .
-            " p_file={$this->tree->id()}" .
-            " AND p_parent_id='0'" .
-            " GROUP BY country ORDER BY tot DESC, country ASC"
-        );
-
-        return $rows;
+        $places = new Places($this->tree);
+        return $places->statsPlaces($what, $fact, $parent, $country);
     }
 
     /**
@@ -1905,25 +1831,8 @@ class Stats
      */
     public function commonBirthPlacesList(): array
     {
-        $places = $this->statsPlaces('INDI', 'BIRT');
-        $top10  = [];
-        $i      = 1;
-
-        arsort($places);
-
-        foreach ($places as $place => $count) {
-            $tmp     = new Place($place, $this->tree);
-            $top10[] = [
-                'place' => $tmp,
-                'count' => $count,
-            ];
-
-            if ($i++ === 10) {
-                break;
-            }
-        }
-
-        return $top10;
+        $places = new BirthPlaces($this->tree);
+        return $places->getList();
     }
 
     /**
@@ -1933,23 +1842,8 @@ class Stats
      */
     public function commonDeathPlacesList(): array
     {
-        $places = $this->statsPlaces('INDI', 'DEAT');
-        $top10  = [];
-        $i      = 1;
-        arsort($places);
-        foreach ($places as $place => $count) {
-            $tmp     = new Place($place, $this->tree);
-            $top10[] = [
-                'place' => $tmp,
-                'count' => $count,
-            ];
-
-            if ($i++ === 10) {
-                break;
-            }
-        }
-
-        return $top10;
+        $places = new DeathPlaces($this->tree);
+        return $places->getList();
     }
 
     /**
@@ -1959,24 +1853,8 @@ class Stats
      */
     public function commonMarriagePlacesList(): array
     {
-        $places = $this->statsPlaces('FAM', 'MARR');
-        $top10  = [];
-        $i      = 1;
-        arsort($places);
-        foreach ($places as $place => $count) {
-            $tmp     = new Place($place, $this->tree);
-
-            $top10[] = [
-                'place' => $tmp,
-                'count' => $count,
-            ];
-
-            if ($i++ === 10) {
-                break;
-            }
-        }
-
-        return $top10;
+        $places = new MarriagePlaces($this->tree);
+        return $places->getList();
     }
 
     /**
