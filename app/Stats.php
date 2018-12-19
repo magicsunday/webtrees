@@ -1774,16 +1774,19 @@ class Stats
     /**
      * A list of common countries.
      *
-     * @return array
+     * @return string
      */
-    public function commonCountriesList(): array
+    public function commonCountriesList(): string
     {
         $countries = $this->statsPlaces();
+
         if (empty($countries)) {
-            return [];
+            return '';
         }
+
         $top10 = [];
         $i     = 1;
+
         // Get the country names for each language
         $country_names = [];
         foreach (I18N::activeLocales() as $locale) {
@@ -1793,7 +1796,9 @@ class Stats
                 $country_names[$country_name] = $country_code;
             }
         }
+
         I18N::init(WT_LOCALE);
+
         $all_db_countries = [];
         foreach ($countries as $place) {
             $country = trim($place->country);
@@ -1807,6 +1812,7 @@ class Stats
         }
         // get all the user’s countries names
         $all_countries = $this->getAllCountries();
+
         foreach ($all_db_countries as $country_code => $country) {
             foreach ($country as $country_name => $tot) {
                 $tmp     = new Place($country_name, $this->tree);
@@ -1823,40 +1829,42 @@ class Stats
             }
         }
 
-        return $top10;
+        return view(
+            'statistics/other/top10-list',
+            [
+                'records' => $top10,
+            ]
+        );
     }
 
     /**
      * A list of common birth places.
      *
-     * @return array
+     * @return string
      */
-    public function commonBirthPlacesList(): array
+    public function commonBirthPlacesList(): string
     {
-        $places = new BirthPlaces($this->tree);
-        return $places->getList();
+        return (string) new BirthPlaces($this->tree);
     }
 
     /**
      * A list of common death places.
      *
-     * @return array
+     * @return string
      */
-    public function commonDeathPlacesList(): array
+    public function commonDeathPlacesList(): string
     {
-        $places = new DeathPlaces($this->tree);
-        return $places->getList();
+        return (string) new DeathPlaces($this->tree);
     }
 
     /**
      * A list of common marriage places.
      *
-     * @return array
+     * @return string
      */
-    public function commonMarriagePlacesList(): array
+    public function commonMarriagePlacesList(): string
     {
-        $places = new MarriagePlaces($this->tree);
-        return $places->getList();
+        return (string) new MarriagePlaces($this->tree);
     }
 
     /**
@@ -2405,9 +2413,9 @@ class Stats
         $total = (int) $total;
 
         // TODO
-        if (!Auth::isMember($this->tree)) {
-            return I18N::translate('This information is private and cannot be shown.');
-        }
+//        if (!Auth::isMember($this->tree)) {
+//            return I18N::translate('This information is private and cannot be shown.');
+//        }
 
         if ($sex === 'F') {
             $sex_search = " AND i_sex='F'";
@@ -2448,7 +2456,7 @@ class Stats
             } elseif ((int) ($age / 30.4375) > 0) {
                 $age = (int) ($age / 30.4375) . 'm';
             } else {
-                $age = $age . 'd';
+                $age .= 'd';
             }
 
 //            $age = FunctionsDate::getAgeAtEvent($age);
@@ -2835,7 +2843,7 @@ class Stats
         $records = $this->topTenOldestQuery('list', 'F', (int) $total);
 
         return view(
-            'statistics/individuals/top-10-oldest-list',
+            'statistics/individuals/top10-list',
             [
                 'records' => $records,
             ]
@@ -2866,7 +2874,7 @@ class Stats
         $records = $this->topTenOldestAliveQuery('list', 'F', $total);
 
         return view(
-            'statistics/individuals/top-10-oldest-alive',
+            'statistics/individuals/top10-list',
             [
                 'records' => $records,
             ]
@@ -2927,7 +2935,7 @@ class Stats
         $records = $this->topTenOldestQuery('nolist', 'M', (int) $total);
 
         return view(
-            'statistics/individuals/top-10-oldest',
+            'statistics/individuals/top10-nolist',
             [
                 'records' => $records,
             ]
@@ -2946,7 +2954,7 @@ class Stats
         $records = $this->topTenOldestQuery('list', 'M', (int) $total);
 
         return view(
-            'statistics/individuals/top-10-oldest-list',
+            'statistics/individuals/top10-list',
             [
                 'records' => $records,
             ]
@@ -2977,7 +2985,7 @@ class Stats
         $records = $this->topTenOldestAliveQuery('list', 'M', $total);
 
         return view(
-            'statistics/individuals/top-10-oldest-alive',
+            'statistics/individuals/top10-list',
             [
                 'records' => $records,
             ]
@@ -3412,9 +3420,9 @@ class Stats
      * @param string $age_dir
      * @param int    $total
      *
-     * @return string
+     * @return array
      */
-    private function ageBetweenSpousesQuery(string $type, string $age_dir, int $total): string
+    private function ageBetweenSpousesQuery(string $type, string $age_dir, int $total): array
     {
         $ageDiff = new AgeDifferenceSpouse($this->tree);
         return $ageDiff->query($type, $age_dir, $total);
@@ -4185,7 +4193,14 @@ class Stats
      */
     public function ageBetweenSpousesMF(string $total = '10'): string
     {
-        return $this->ageBetweenSpousesQuery('nolist', 'DESC', (int) $total);
+        $records = $this->ageBetweenSpousesQuery('nolist', 'DESC', (int) $total);
+
+        return view(
+            'statistics/families/top10-nolist-spouses',
+            [
+                'records' => $records,
+            ]
+        );
     }
 
     /**
@@ -4197,7 +4212,14 @@ class Stats
      */
     public function ageBetweenSpousesMFList(string $total = '10'): string
     {
-        return $this->ageBetweenSpousesQuery('list', 'DESC', (int) $total);
+        $records = $this->ageBetweenSpousesQuery('list', 'DESC', (int) $total);
+
+        return view(
+            'statistics/families/top10-list-spouses',
+            [
+                'records' => $records,
+            ]
+        );
     }
 
     /**
@@ -4209,7 +4231,14 @@ class Stats
      */
     public function ageBetweenSpousesFM(string $total = '10'): string
     {
-        return $this->ageBetweenSpousesQuery('nolist', 'ASC', (int) $total);
+        $records = $this->ageBetweenSpousesQuery('nolist', 'ASC', (int) $total);
+
+        return view(
+            'statistics/families/top10-nolist-spouses',
+            [
+                'records' => $records,
+            ]
+        );
     }
 
     /**
@@ -4221,7 +4250,14 @@ class Stats
      */
     public function ageBetweenSpousesFMList(string $total = '10'): string
     {
-        return $this->ageBetweenSpousesQuery('list', 'ASC', (int) $total);
+        $records = $this->ageBetweenSpousesQuery('list', 'ASC', (int) $total);
+
+        return view(
+            'statistics/families/top10-list-spouses',
+            [
+                'records' => $records,
+            ]
+        );
     }
 
     /**
@@ -4582,9 +4618,9 @@ class Stats
      * @param int    $total
      * @param bool   $one   Include each family only once if true
      *
-     * @return string
+     * @return array
      */
-    private function ageBetweenSiblingsQuery(string $type, int $total, bool $one): string
+    private function ageBetweenSiblingsQuery(string $type, int $total, bool $one): array
     {
         $ageDiff = new AgeDifferenceSiblings($this->tree);
         return $ageDiff->query($type, $total, $one);
@@ -4688,7 +4724,14 @@ class Stats
      */
     public function topTenLargestFamily(string $total = '10'): string
     {
-//        return $this->topTenFamilyQuery('nolist', (int) $total);
+        $records = $this->topTenFamilyQuery('nolist', (int) $total);
+
+        return view(
+            'statistics/families/top10-nolist',
+            [
+                'records' => $records,
+            ]
+        );
     }
 
     /**
@@ -4696,11 +4739,18 @@ class Stats
      *
      * @param string $total
      *
-     * @return array
+     * @return string
      */
-    public function topTenLargestFamilyList(string $total = '10'): array
+    public function topTenLargestFamilyList(string $total = '10'): string
     {
-        return $this->topTenFamilyQuery('list', (int) $total);
+        $records = $this->topTenFamilyQuery('list', (int) $total);
+
+        return view(
+            'statistics/families/top10-list',
+            [
+                'records' => $records,
+            ]
+        );
     }
 
     /**
@@ -4946,7 +4996,14 @@ class Stats
      */
     public function topAgeBetweenSiblingsFullName(string $total = '10', string $one = ''): string
     {
-        return $this->ageBetweenSiblingsQuery('nolist', (int) $total, (bool) $one);
+        $record = $this->ageBetweenSiblingsQuery('nolist', (int) $total, (bool) $one);
+
+        return view(
+            'statistics/families/top10-nolist-age',
+            [
+                'record' => $record,
+            ]
+        );
     }
 
     /**
@@ -4959,7 +5016,14 @@ class Stats
      */
     public function topAgeBetweenSiblingsList(string $total = '10', string $one = ''): string
     {
-        return $this->ageBetweenSiblingsQuery('list', (int) $total, (bool) $one);
+        $records = $this->ageBetweenSiblingsQuery('list', (int) $total, (bool) $one);
+
+        return view(
+            'statistics/families/top10-list-age',
+            [
+                'records' => $records,
+            ]
+        );
     }
 
     /**
@@ -5210,7 +5274,14 @@ class Stats
      */
     public function topTenLargestGrandFamily(string $total = '10'): string
     {
-//        return $this->topTenGrandFamilyQuery('nolist', (int) $total);
+        $records = $this->topTenGrandFamilyQuery('nolist', (int) $total);
+
+        return view(
+            'statistics/families/top10-nolist-grand',
+            [
+                'records' => $records,
+            ]
+        );
     }
 
     /**
@@ -5218,11 +5289,18 @@ class Stats
      *
      * @param string $total
      *
-     * @return array
+     * @return string
      */
-    public function topTenLargestGrandFamilyList(string $total = '10'): array
+    public function topTenLargestGrandFamilyList(string $total = '10'): string
     {
-        return $this->topTenGrandFamilyQuery('list', (int) $total);
+        $records = $this->topTenGrandFamilyQuery('list', (int) $total);
+
+        return view(
+            'statistics/families/top10-list-grand',
+            [
+                'records' => $records,
+            ]
+        );
     }
 
     /**
