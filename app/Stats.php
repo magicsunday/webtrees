@@ -18,10 +18,7 @@ declare(strict_types=1);
 namespace Fisharebest\Webtrees;
 
 use Fisharebest\Webtrees\Functions\FunctionsDate;
-use Fisharebest\Webtrees\Statistics\Age as StatisticAge;
-use Fisharebest\Webtrees\Statistics\Birth;
 use Fisharebest\Webtrees\Statistics\BirthPlaces;
-use Fisharebest\Webtrees\Statistics\Death;
 use Fisharebest\Webtrees\Statistics\DeathPlaces;
 use Fisharebest\Webtrees\Statistics\Google;
 use Fisharebest\Webtrees\Statistics\Helper\Country;
@@ -1301,7 +1298,7 @@ class Stats implements
      */
     public function statsBirthQuery($simple = true, $sex = false, $year1 = -1, $year2 = -1): array
     {
-        return (new Birth($this->tree))->query($sex, $year1, $year2);
+        return $this->individualRepository->statsBirthQuery($sex, $year1, $year2);
     }
 
     /**
@@ -1315,8 +1312,7 @@ class Stats implements
      */
     public function statsBirth(string $size = null, string $color_from = null, string $color_to = null): string
     {
-        return (new Google\ChartBirth($this->tree))
-            ->chartBirth($size, $color_from, $color_to);
+        return $this->individualRepository->statsBirth($size, $color_from, $color_to);
     }
 
     /**
@@ -1411,7 +1407,7 @@ class Stats implements
      */
     public function statsDeathQuery($simple = true, $sex = false, $year1 = -1, $year2 = -1): array
     {
-        return (new Death($this->tree))->query($sex, $year1, $year2);
+        return $this->individualRepository->statsDeathQuery($sex, $year1, $year2);
     }
 
     /**
@@ -1425,8 +1421,7 @@ class Stats implements
      */
     public function statsDeath(string $size = null, string $color_from = null, string $color_to = null): string
     {
-        return (new Google\ChartDeath($this->tree))
-            ->chartDeath($size, $color_from, $color_to);
+        return $this->individualRepository->statsDeath($size, $color_from, $color_to);
     }
 
     /**
@@ -1728,7 +1723,7 @@ class Stats implements
      */
     public function statsAgeQuery($simple = true, $related = 'BIRT', $sex = 'BOTH', $year1 = -1, $year2 = -1)
     {
-        return (new StatisticAge($this->tree))->query($related, $sex, $year1, $year2);
+        return $this->individualRepository->statsAgeQuery($related, $sex, $year1, $year2);
     }
 
     /**
@@ -1740,7 +1735,7 @@ class Stats implements
      */
     public function statsAge(string $size = '230x250'): string
     {
-        return (new Google\ChartAge($this->tree))->chartAge($size);
+        return $this->individualRepository->statsAge($size);
     }
 
     /**
