@@ -23,7 +23,7 @@ use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\User;
 
 /**
- * Statistics submodule providing all CONTACT related methods.
+ * A repository providing methods for contact related statistics.
  */
 class ContactRepository implements ContactRepositoryInterface
 {
@@ -43,9 +43,7 @@ class ContactRepository implements ContactRepositoryInterface
     }
 
     /**
-     * Create a link to contact the webmaster.
-     *
-     * @return string
+     * @inheritDoc
      */
     public function contactWebmaster(): string
     {
@@ -60,9 +58,7 @@ class ContactRepository implements ContactRepositoryInterface
     }
 
     /**
-     * Create a link to contact the genealogy contact.
-     *
-     * @return string
+     * @inheritDoc
      */
     public function contactGedcom(): string
     {
