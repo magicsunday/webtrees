@@ -34,14 +34,14 @@ use Fisharebest\Webtrees\Statistics\Repository\Interfaces\FavoritesRepositoryInt
 use Fisharebest\Webtrees\Statistics\Repository\Interfaces\GedcomRepositoryInterface;
 use Fisharebest\Webtrees\Statistics\Repository\Interfaces\HitCountRepositoryInterface;
 use Fisharebest\Webtrees\Statistics\Repository\Interfaces\IndividualRepositoryInterface;
-use Fisharebest\Webtrees\Statistics\Repository\Interfaces\LatestRepositoryInterface;
+use Fisharebest\Webtrees\Statistics\Repository\Interfaces\LatestUserRepositoryInterface;
 use Fisharebest\Webtrees\Statistics\Repository\Interfaces\MediaRepositoryInterface;
 use Fisharebest\Webtrees\Statistics\Repository\Interfaces\MessageRepositoryInterface;
 use Fisharebest\Webtrees\Statistics\Repository\Interfaces\NewsRepositoryInterface;
 use Fisharebest\Webtrees\Statistics\Repository\Interfaces\PlaceRepositoryInterface;
 use Fisharebest\Webtrees\Statistics\Repository\Interfaces\ServerRepositoryInterface;
 use Fisharebest\Webtrees\Statistics\Repository\Interfaces\UserRepositoryInterface;
-use Fisharebest\Webtrees\Statistics\Repository\LatestRepository;
+use Fisharebest\Webtrees\Statistics\Repository\LatestUserRepository;
 use Fisharebest\Webtrees\Statistics\Repository\MediaRepository;
 use Fisharebest\Webtrees\Statistics\Repository\MessageRepository;
 use Fisharebest\Webtrees\Statistics\Repository\NewsRepository;
@@ -66,7 +66,7 @@ class Stats implements
     ServerRepositoryInterface,
     BrowserRepositoryInterface,
     HitCountRepositoryInterface,
-    LatestRepositoryInterface,
+    LatestUserRepositoryInterface,
     FavoritesRepositoryInterface,
     NewsRepositoryInterface,
     MessageRepositoryInterface,
@@ -141,9 +141,9 @@ class Stats implements
     private $hitCountRepository;
 
     /**
-     * @var LatestRepository
+     * @var LatestUserRepository
      */
-    private $latestRepository;
+    private $latestUserRepository;
 
     /**
      * @var FavoritesRepository
@@ -193,7 +193,7 @@ class Stats implements
         $this->serverRepository      = new ServerRepository();
         $this->browserRepository     = new BrowserRepository();
         $this->hitCountRepository    = new HitCountRepository($tree);
-        $this->latestRepository      = new LatestRepository();
+        $this->latestUserRepository  = new LatestUserRepository();
         $this->favoritesRepository   = new FavoritesRepository($tree);
         $this->newsRepository        = new NewsRepository($tree);
         $this->messageRepository     = new MessageRepository();
@@ -2316,7 +2316,7 @@ class Stats implements
      */
     public function latestUserId(): string
     {
-        return $this->latestRepository->latestUserId();
+        return $this->latestUserRepository->latestUserId();
     }
 
     /**
@@ -2324,7 +2324,7 @@ class Stats implements
      */
     public function latestUserName(): string
     {
-        return $this->latestRepository->latestUserName();
+        return $this->latestUserRepository->latestUserName();
     }
 
     /**
@@ -2332,7 +2332,7 @@ class Stats implements
      */
     public function latestUserFullName(): string
     {
-        return $this->latestRepository->latestUserFullName();
+        return $this->latestUserRepository->latestUserFullName();
     }
 
     /**
@@ -2340,7 +2340,7 @@ class Stats implements
      */
     public function latestUserRegDate(string $format = null): string
     {
-        return $this->latestRepository->latestUserRegDate();
+        return $this->latestUserRepository->latestUserRegDate();
     }
 
     /**
@@ -2348,7 +2348,7 @@ class Stats implements
      */
     public function latestUserRegTime(string $format = null): string
     {
-        return $this->latestRepository->latestUserRegTime();
+        return $this->latestUserRepository->latestUserRegTime();
     }
 
     /**
@@ -2356,7 +2356,7 @@ class Stats implements
      */
     public function latestUserLoggedin(string $yes = null, string $no = null): string
     {
-        return $this->latestRepository->latestUserLoggedin();
+        return $this->latestUserRepository->latestUserLoggedin();
     }
 
     /**
