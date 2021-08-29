@@ -17,6 +17,20 @@ $id   = 'google-chart-' . bin2hex(random_bytes(8));
 $name = 'callback_' . bin2hex(random_bytes(12));
 ?>
 
+<style>
+    .container {
+        margin: 0 auto
+    }
+
+    .leaflet-container,
+    #map {
+        background: #c5e8ff;
+        background: -webkit-gradient(radial, center center, 0, center center, 100%, color-stop(0%, #c5e8ff), color-stop(100%, #a0c3ff));
+        background: -webkit-radial-gradient(center, ellipse cover, #c5e8ff 0, #a0c3ff 100%);
+        background: radial-gradient(ellipse at center, #c5e8ff 0, #a0c3ff 100%)
+    }
+</style>
+
 <?php if (count($data) === 1) : ?>
     <?= I18N::translate('This information is not available.') ?>
 <?php else : ?>
@@ -28,7 +42,7 @@ $name = 'callback_' . bin2hex(random_bytes(12));
                         <?= $chart_title ?>
                     </div>
                     <div class="card-body">
-                        <div id="<?= $id ?>" title="<?= $chart_title ?>"></div>
+                        <div id="<?= $id ?>" title="<?= $chart_title ?>" class="leaflet-container" style="width: 100%; height: 600px"></div>
                     </div>
                 </div>
             </div>
@@ -37,20 +51,103 @@ $name = 'callback_' . bin2hex(random_bytes(12));
     <script>
 
     let <?= $name ?> = function () {
-        statistics.drawGeoChart(
-            <?= json_encode($id) ?>,
-            <?= json_encode($data) ?>,
+        var allowedCountries = {};
+        var map = L.map('<?= $id ?>',
             {
-                title: <?= json_encode($chart_title) ?>,
-                region: <?= json_encode($region) ?>,
-                colorAxis: {
-                    colors: [
-                        <?= json_encode('#' . $chart_color3) ?>,
-                        <?= json_encode('#' . $chart_color2) ?>
-                    ]
+                zoom: 1.8,
+                minZoom: 1.8,
+                maxZoom: 1.8,
+                zoomControl: false,
+                center: [45, 0]
+            });
+
+        $.getJSON('public/js/custom.geo.json', function (json) {
+            L.geoJson(json,{
+                clickable:true,
+                style: function(item){
+                    if(item.properties.type == 'stateline'){
+                        return {
+                            fill:false,
+                            stroke:true,
+                            color:'#EAEAEA',
+                            weight:2
+                        }
+                    } if(item.geometry.type == 'Point'){
+                        if(item.properties.importance > 1){
+                            return {
+                                fill:false,
+                                stroke:false
+                            }
+                        }
+
+                        return {
+                            fill:true,
+                            fillOpacity:1,
+                            stroke:false,
+                            fillColor:"#aaa",
+                            radius: 2 / item.properties.importance
+                        }
+
+                    } else {
+                        return {
+                            fillColor:'#fff',
+                            fillOpacity:1,
+                            fill:true,
+                            color:'#eeeeff',
+                            weight:1
+                        }
+                    }
+                },
+
+                pointToLayer: function (feature, latlng) {
+                    return L.circleMarker(latlng)
+                        .bindLabel(feature.properties.name,{
+                            noHide:true
+                        });
+                },
+
+                onEachFeature: function (feature, layer) {
+                    var name = feature.properties.name;
+                    function ctxFillColor(){
+                        return allowedCountries[name] ? '#ffddff' : '#fff';
+                    }
+                    layer.on('click',function(){
+                        allowedCountries[name] = !allowedCountries[name];
+                        console.log(allowedCountries[name])
+                        layer.setStyle({
+                            fillColor: ctxFillColor()
+                        });
+                    });
+
+                    layer.on('mouseover',function(){
+                        layer.setStyle({
+                            fillColor: '#ffaaff'
+                        })
+                    })
+
+                    layer.on('mouseout',function(){
+                        layer.setStyle({
+                            fillColor: ctxFillColor()
+                        })
+                    })
                 }
-            }
-        );
+            }).addTo(map);
+        });
+
+        //statistics.drawGeoChart(
+        //    <?//= json_encode($id) ?>//,
+        //    <?//= json_encode($data) ?>//,
+        //    {
+        //        title: <?//= json_encode($chart_title) ?>//,
+        //        region: <?//= json_encode($region) ?>//,
+        //        colorAxis: {
+        //            colors: [
+        //                <?//= json_encode('#' . $chart_color3) ?>//,
+        //                <?//= json_encode('#' . $chart_color2) ?>
+        //            ]
+        //        }
+        //    }
+        //);
     };
 
     if (document.readyState === "complete"
