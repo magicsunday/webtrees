@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Census;
 
+use Override;
+use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\Age;
 use Fisharebest\Webtrees\Date;
 use Fisharebest\Webtrees\Individual;
@@ -69,12 +71,13 @@ abstract class AbstractCensusColumnCondition extends AbstractCensusColumn implem
      *
      * @return string
      */
+    #[Override]
     public function generate(Individual $individual, Individual $head): string
     {
         $family = $this->spouseFamily($individual);
         $sex    = $individual->sex();
 
-        if ($family === null || $family->facts(['MARR'])->isEmpty()) {
+        if (!($family instanceof Family) || $family->facts(['MARR'])->isEmpty()) {
             if ($this->isChild($individual)) {
                 return $this->conditionChild($sex);
             }
