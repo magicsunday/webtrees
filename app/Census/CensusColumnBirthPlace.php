@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Census;
 
+use Override;
 use Fisharebest\Webtrees\Individual;
 
 use function strlen;
@@ -36,6 +37,7 @@ class CensusColumnBirthPlace extends AbstractCensusColumn implements CensusColum
      *
      * @return string
      */
+    #[Override]
     public function generate(Individual $individual, Individual $head): string
     {
         $birth_place  = $individual->getBirthPlace()->gedcomName();

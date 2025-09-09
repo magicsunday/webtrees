@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Census;
 
+use Override;
 use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\Individual;
 
@@ -35,6 +36,7 @@ class CensusColumnReligion extends AbstractCensusColumn implements CensusColumnI
      *
      * @return string
      */
+    #[Override]
     public function generate(Individual $individual, Individual $head): string
     {
         $reli_fact = $individual->facts(['RELI'])->first();

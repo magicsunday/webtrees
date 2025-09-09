@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Census;
 
+use Override;
 use Fisharebest\Webtrees\Individual;
 
 /**
@@ -34,11 +35,12 @@ class CensusColumnFatherForeign extends AbstractCensusColumn implements CensusCo
      *
      * @return string
      */
+    #[Override]
     public function generate(Individual $individual, Individual $head): string
     {
         $father = $this->father($individual);
 
-        if ($father && $this->lastPartOfPlace($father->getBirthPlace()->gedcomName()) !== $this->place()) {
+        if ($father instanceof Individual && $this->lastPartOfPlace($father->getBirthPlace()->gedcomName()) !== $this->place()) {
             return 'Y';
         }
 

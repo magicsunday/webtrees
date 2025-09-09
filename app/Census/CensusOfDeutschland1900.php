@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Census;
 
+use Override;
+
 /**
  * Definitions for a census
  */
@@ -39,6 +41,7 @@ class CensusOfDeutschland1900 extends CensusOfDeutschland implements CensusInter
      *
      * @return string
      */
+    #[Override]
     public function censusPlace(): string
     {
         return 'Mecklenburg-Schwerin, Deutschland';

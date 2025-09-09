@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Census;
 
+use Override;
+use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\Date;
 use Fisharebest\Webtrees\Individual;
 
@@ -35,11 +37,12 @@ class CensusColumnChildrenBornAlive extends AbstractCensusColumn implements Cens
      *
      * @return string
      */
+    #[Override]
     public function generate(Individual $individual, Individual $head): string
     {
         $family = $this->spouseFamily($individual);
 
-        if ($family === null || $individual->sex() !== 'F') {
+        if (!($family instanceof Family) || $individual->sex() !== 'F') {
             return '';
         }
 

@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Census;
 
+use Override;
 use Fisharebest\Webtrees\Age;
 use Fisharebest\Webtrees\Date;
 use Fisharebest\Webtrees\I18N;
@@ -37,6 +38,7 @@ class CensusColumnYearsMarried extends AbstractCensusColumn implements CensusCol
      *
      * @return string
      */
+    #[Override]
     public function generate(Individual $individual, Individual $head): string
     {
         $marriage_date = null;

@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Census;
 
+use Override;
 use Fisharebest\Webtrees\Individual;
 
 /**
@@ -34,6 +35,7 @@ class CensusColumnBirthDaySlashMonthYear extends AbstractCensusColumn implements
      *
      * @return string
      */
+    #[Override]
     public function generate(Individual $individual, Individual $head): string
     {
         return $individual->getEstimatedBirthDate()->minimumDate()->format('%j/%n %Y');

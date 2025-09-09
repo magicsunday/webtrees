@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Census;
 
+use Override;
 use Fisharebest\Webtrees\Individual;
 
 /**
@@ -34,6 +35,7 @@ class CensusColumnSurnameGivenNameInitial extends AbstractCensusColumn implement
      *
      * @return string
      */
+    #[Override]
     public function generate(Individual $individual, Individual $head): string
     {
         $name  = $this->nameAtCensusDate($individual);

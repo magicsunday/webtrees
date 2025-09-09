@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Census;
 
+use Override;
 use Fisharebest\Webtrees\Individual;
 
 /**
@@ -34,6 +35,7 @@ class CensusColumnBornForeignParts extends AbstractCensusColumn implements Censu
      *
      * @return string
      */
+    #[Override]
     public function generate(Individual $individual, Individual $head): string
     {
         $birth_place  = (string) $individual->getBirthPlace()->lastParts(1)->first();
@@ -52,7 +54,7 @@ class CensusColumnBornForeignParts extends AbstractCensusColumn implements Censu
         }
 
         if ($birth_place === 'England' || $birth_place === 'Scotland' || $birth_place === 'Ireland') {
-            return substr($birth_place, 0, 1);
+            return $birth_place[0];
         }
 
         return 'F';

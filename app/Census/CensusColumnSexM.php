@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Census;
 
+use Override;
 use Fisharebest\Webtrees\Individual;
 
 /**
@@ -42,6 +43,7 @@ class CensusColumnSexM extends AbstractCensusColumn implements CensusColumnInter
      *
      * @return string
      */
+    #[Override]
     public function generate(Individual $individual, Individual $head): string
     {
         if ($individual->sex() === 'M') {

@@ -19,9 +19,12 @@ declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Census;
 
+use Override;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\RelationshipService;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Relationship to head of household.
@@ -37,15 +40,19 @@ class CensusColumnRelationToHead extends AbstractCensusColumn implements CensusC
      * @param Individual $head
      *
      * @return string
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
+    #[Override]
     public function generate(Individual $individual, Individual $head): string
     {
         if ($individual === $head) {
             return static::HEAD_OF_HOUSEHOLD;
         }
 
-        $relationship_service = Registry::container()->get(RelationshipService::class);
-
-        return $relationship_service->getCloseRelationshipName($head, $individual);
+        return Registry::container()
+            ->get(RelationshipService::class)
+            ->getCloseRelationshipName($head, $individual);
     }
 }

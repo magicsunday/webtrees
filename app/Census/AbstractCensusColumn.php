@@ -32,11 +32,11 @@ use function implode;
  */
 class AbstractCensusColumn
 {
-    private CensusInterface $census;
+    private readonly CensusInterface $census;
 
-    private string $abbr;
+    private readonly string $abbr;
 
-    private string $title;
+    private readonly string $title;
 
     /**
      * Create a column for a census
