@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Census;
 
+use Override;
+
 /**
  * Definitions for a census
  */
@@ -39,6 +41,7 @@ class CensusOfDenmark1803 extends CensusOfDenmark implements CensusInterface
      *
      * @return string
      */
+    #[Override]
     public function censusPlace(): string
     {
         return 'Schleswig-Holstein, Deutschland';
