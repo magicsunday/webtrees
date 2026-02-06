@@ -44,7 +44,7 @@
         "ext-session": "*",
         "ext-xml": "*",
         "aura/router": "3.4.2",
-        "doctrine/dbal": "3.10.4",
+        "doctrine/dbal": "3.10.5",
         "ezyang/htmlpurifier": "4.19.0",
         "fig/http-message-util": "1.1.5",
         "fisharebest/algorithm": "1.6.0",
@@ -57,7 +57,7 @@
         "illuminate/support": "8.83.27",
         "intervention/image": "2.7.2",
         "io-developer/php-whois": "4.1.10",
-        "league/commonmark": "2.8.0",
+        "league/commonmark": "2.8.2",
         "league/flysystem": "2.5.0",
         "league/flysystem-ziparchive": "2.3.1",
         "middlewares/client-ip": "2.1.0",
@@ -77,17 +77,17 @@
         "symfony/mailer": "5.4.45",
         "symfony/polyfill-mbstring": "1.33.0",
         "symfony/polyfill-php80": "1.33.0",
-        "tecnickcom/tcpdf": "6.10.1"
+        "tecnickcom/tcpdf": "6.11.2"
     },
     "require-dev": {
         "ext-dom": "*",
         "ext-libxml": "*",
         "ext-pdo_sqlite": "*",
         "ext-sqlite3": "*",
-        "composer/composer": "2.9.4",
+        "composer/composer": "2.9.5",
         "league/flysystem-memory": "2.0.6",
         "php-coveralls/php-coveralls": "2.9.1",
-        "phpstan/phpstan": "2.1.37",
+        "phpstan/phpstan": "2.1.46",
         "phpunit/phpunit": "9.6.34",
         "squizlabs/php_codesniffer": "4.0.1"
     },
