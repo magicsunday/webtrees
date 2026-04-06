@@ -1417,6 +1417,12 @@ parameters:
 			path: app/GedcomRecord.php
 
 		-
+			rawMessage: 'Parameter #2 $array of function implode expects array<string>, array<int, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: app/GedcomRecord.php
+
+		-
 			rawMessage: 'Parameter #2 $haystack of function array_search expects array, array<int<1, max>, string>|false given.'
 			identifier: argument.type
 			count: 2
@@ -1588,6 +1594,12 @@ parameters:
 			rawMessage: 'Cannot call method instance() on mixed.'
 			identifier: method.nonObject
 			count: 2
+			path: app/Http/Middleware/Router.php
+
+		-
+			rawMessage: 'Parameter #2 $array of function implode expects array<string>, array given.'
+			identifier: argument.type
+			count: 1
 			path: app/Http/Middleware/Router.php
 
 		-
@@ -1796,6 +1808,12 @@ parameters:
 
 		-
 			rawMessage: 'Parameter #1 $value of function e expects Illuminate\Contracts\Support\DeferringDisplayableValue|Illuminate\Contracts\Support\Htmlable|string|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: app/Http/RequestHandlers/CheckTree.php
+
+		-
+			rawMessage: 'Parameter #2 $array of function implode expects array<string>, list given.'
 			identifier: argument.type
 			count: 1
 			path: app/Http/RequestHandlers/CheckTree.php
@@ -2505,7 +2523,7 @@ parameters:
 		-
 			rawMessage: 'Parameter #1 $value of function e expects Illuminate\Contracts\Support\DeferringDisplayableValue|Illuminate\Contracts\Support\Htmlable|string|null, mixed given.'
 			identifier: argument.type
-			count: 5
+			count: 4
 			path: app/Http/RequestHandlers/ManageMediaData.php
 
 		-
@@ -2535,7 +2553,7 @@ parameters:
 		-
 			rawMessage: 'Parameter #2 $parameters of function route expects array<array<string>|bool|int|string|null>, array<string, mixed> given.'
 			identifier: argument.type
-			count: 4
+			count: 3
 			path: app/Http/RequestHandlers/ManageMediaData.php
 
 		-
@@ -2672,6 +2690,12 @@ parameters:
 
 		-
 			rawMessage: 'Parameter #1 $var of function count expects array|Countable, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: app/Http/RequestHandlers/MapDataExportGeoJson.php
+
+		-
+			rawMessage: 'Parameter #2 $array of function implode expects array<string>, array given.'
 			identifier: argument.type
 			count: 1
 			path: app/Http/RequestHandlers/MapDataExportGeoJson.php
@@ -3059,6 +3083,12 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: app/Http/RequestHandlers/PendingChangesRejectChange.php
+
+		-
+			rawMessage: 'Offset 1 might not exist on array{}|array{non-falsy-string, string}.'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: app/Http/RequestHandlers/PhpInformation.php
 
 		-
 			rawMessage: 'Parameter #2 $subject of function preg_match expects string, string|false given.'
@@ -4885,6 +4915,12 @@ parameters:
 			path: app/Module/GeonamesAutocomplete.php
 
 		-
+			rawMessage: 'Parameter #2 $array of function implode expects array<string>, array<int, mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: app/Module/GeonamesAutocomplete.php
+
+		-
 			rawMessage: Cannot cast mixed to int.
 			identifier: cast.int
 			count: 2
@@ -5503,6 +5539,12 @@ parameters:
 			path: app/Module/MediaListModule.php
 
 		-
+			rawMessage: 'Parameter #1 $keys of function array_combine expects an array of values castable to string, array given.'
+			identifier: argument.type
+			count: 1
+			path: app/Module/MediaListModule.php
+
+		-
 			rawMessage: 'Parameter #2 $path of method Aura\Router\Map::get() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
@@ -5631,6 +5673,12 @@ parameters:
 		-
 			rawMessage: 'Method Fisharebest\Webtrees\Module\OpenRouteServiceAutocomplete::parsePlaceNameSearchResponse() should return array<string> but returns list.'
 			identifier: return.type
+			count: 1
+			path: app/Module/OpenRouteServiceAutocomplete.php
+
+		-
+			rawMessage: 'Parameter #2 $array of function implode expects array<string>, array<int, mixed> given.'
+			identifier: argument.type
 			count: 1
 			path: app/Module/OpenRouteServiceAutocomplete.php
 
@@ -7219,6 +7267,12 @@ parameters:
 			path: app/Report/ReportParserGenerate.php
 
 		-
+			rawMessage: 'Offset ''inputs'' on array{title: string, description: string, inputs: array<array{name: string, type: string, lookup: string, options: string, default: string, value: string}>} in isset() always exists and is not nullable.'
+			identifier: isset.offset
+			count: 1
+			path: app/Report/ReportParserSetup.php
+
+		-
 			rawMessage: Binary operation "*" between mixed and 2 results in an error.
 			identifier: binaryOp.invalid
 			count: 1
@@ -8023,6 +8077,18 @@ parameters:
 			path: app/Services/MapDataService.php
 
 		-
+			rawMessage: 'Parameter #2 $array of function implode expects array<string>, array<mixed> given.'
+			identifier: argument.type
+			count: 2
+			path: app/Services/MapDataService.php
+
+		-
+			rawMessage: 'Parameter #2 $array of function implode expects array<string>, list<mixed> given.'
+			identifier: argument.type
+			count: 1
+			path: app/Services/MapDataService.php
+
+		-
 			rawMessage: 'Parameter #2 $parent_place_ids of method Fisharebest\Webtrees\Services\MapDataService::deleteUnusedLocations() expects list<int>, array given.'
 			identifier: argument.type
 			count: 1
@@ -8083,6 +8149,12 @@ parameters:
 			path: app/Services/MediaFileService.php
 
 		-
+			rawMessage: 'Parameter #1 $arr1 of function array_diff expects an array of values castable to string, array given.'
+			identifier: argument.type
+			count: 1
+			path: app/Services/MediaFileService.php
+
+		-
 			rawMessage: 'Parameter #1 $column of method Illuminate\Database\Query\Builder::pluck() expects string, Illuminate\Database\Query\Expression given.'
 			identifier: argument.type
 			count: 3
@@ -8092,6 +8164,12 @@ parameters:
 			rawMessage: 'Parameter #1 $column of method Illuminate\Database\Query\Builder::where() expects array|Closure|string, Illuminate\Database\Query\Expression given.'
 			identifier: argument.type
 			count: 2
+			path: app/Services/MediaFileService.php
+
+		-
+			rawMessage: 'Parameter #1 $keys of function array_combine expects an array of values castable to string, list given.'
+			identifier: argument.type
+			count: 1
 			path: app/Services/MediaFileService.php
 
 		-
@@ -8108,6 +8186,12 @@ parameters:
 
 		-
 			rawMessage: 'Parameter #1 $uploaded_file of class Fisharebest\Webtrees\Exceptions\FileUploadException constructor expects Psr\Http\Message\UploadedFileInterface|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: app/Services/MediaFileService.php
+
+		-
+			rawMessage: 'Parameter #2 $arr2 of function array_diff expects an array of values castable to string, array given.'
 			identifier: argument.type
 			count: 1
 			path: app/Services/MediaFileService.php
@@ -8263,6 +8347,12 @@ parameters:
 			path: app/Services/PendingChangesService.php
 
 		-
+			rawMessage: 'Offset 1 might not exist on array{}|array{non-falsy-string, non-falsy-string}.'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: app/Services/PendingChangesService.php
+
+		-
 			rawMessage: 'Parameter #1 $gedrec of method Fisharebest\Webtrees\Services\GedcomImportService::updateRecord() expects string, mixed given.'
 			identifier: argument.type
 			count: 6
@@ -8317,7 +8407,7 @@ parameters:
 			path: app/Services/RelationshipService.php
 
 		-
-			rawMessage: Cannot access offset string on mixed.
+			rawMessage: Cannot access offset non-empty-string on mixed.
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
 			path: app/Services/RelationshipService.php
@@ -8528,6 +8618,12 @@ parameters:
 
 		-
 			rawMessage: 'Parameter #1 $text of method Fisharebest\Webtrees\Module\ModuleLanguageInterface::normalize() expects string, string|null given.'
+			identifier: argument.type
+			count: 1
+			path: app/Services/SearchService.php
+
+		-
+			rawMessage: 'Parameter #2 $array of function implode expects array<string>, array<mixed> given.'
 			identifier: argument.type
 			count: 1
 			path: app/Services/SearchService.php
@@ -9235,12 +9331,6 @@ parameters:
 			path: app/StatisticsData.php
 
 		-
-			rawMessage: Cannot cast mixed to string.
-			identifier: cast.string
-			count: 1
-			path: app/StatisticsData.php
-
-		-
 			rawMessage: 'Method Fisharebest\Webtrees\StatisticsData::ageBetweenSpousesQuery() should return array<array{family: Fisharebest\Webtrees\Family, age: string}> but returns array.'
 			identifier: return.type
 			count: 1
@@ -9441,7 +9531,7 @@ parameters:
 		-
 			rawMessage: Possibly invalid array key type mixed.
 			identifier: offsetAccess.invalidOffset
-			count: 11
+			count: 10
 			path: app/StatisticsData.php
 
 		-
@@ -9979,7 +10069,7 @@ parameters:
 			path: resources/views/edit/reorder-media.phtml
 
 		-
-			rawMessage: 'Parameter #1 $array_arg of function uasort expects TArray of array<string, string>, array<string, string>|false given.'
+			rawMessage: 'Parameter #1 $array_arg of function uasort expects array<string, string>, array<string, string>|false given.'
 			identifier: argument.type
 			count: 1
 			path: resources/views/fact-add-new.phtml
@@ -10213,6 +10303,12 @@ parameters:
 			path: resources/views/lists/locations-table.phtml
 
 		-
+			rawMessage: 'Parameter #1 $input of function array_sum expects an array of values castable to number, array given.'
+			identifier: argument.type
+			count: 2
+			path: resources/views/lists/locations-table.phtml
+
+		-
 			rawMessage: 'Parameter #1 $n of static method Fisharebest\Webtrees\I18N::number() expects float, mixed given.'
 			identifier: argument.type
 			count: 2
@@ -10231,6 +10327,12 @@ parameters:
 			path: resources/views/lists/media-table.phtml
 
 		-
+			rawMessage: 'Parameter #1 $input of function array_sum expects an array of values castable to number, array given.'
+			identifier: argument.type
+			count: 3
+			path: resources/views/lists/media-table.phtml
+
+		-
 			rawMessage: 'Parameter #1 $n of static method Fisharebest\Webtrees\I18N::number() expects float, mixed given.'
 			identifier: argument.type
 			count: 3
@@ -10249,6 +10351,12 @@ parameters:
 			path: resources/views/lists/notes-table.phtml
 
 		-
+			rawMessage: 'Parameter #1 $input of function array_sum expects an array of values castable to number, array given.'
+			identifier: argument.type
+			count: 4
+			path: resources/views/lists/notes-table.phtml
+
+		-
 			rawMessage: 'Parameter #1 $n of static method Fisharebest\Webtrees\I18N::number() expects float, mixed given.'
 			identifier: argument.type
 			count: 4
@@ -10262,6 +10370,12 @@ parameters:
 
 		-
 			rawMessage: 'Parameter #1 $column of method Illuminate\Database\Query\Builder::pluck() expects string, Illuminate\Database\Query\Expression given.'
+			identifier: argument.type
+			count: 1
+			path: resources/views/lists/repositories-table.phtml
+
+		-
+			rawMessage: 'Parameter #1 $input of function array_sum expects an array of values castable to number, array given.'
 			identifier: argument.type
 			count: 1
 			path: resources/views/lists/repositories-table.phtml
@@ -10286,6 +10400,12 @@ parameters:
 
 		-
 			rawMessage: 'Parameter #1 $column of method Illuminate\Database\Query\Builder::pluck() expects string, Illuminate\Database\Query\Expression given.'
+			identifier: argument.type
+			count: 4
+			path: resources/views/lists/sources-table.phtml
+
+		-
+			rawMessage: 'Parameter #1 $input of function array_sum expects an array of values castable to number, array given.'
 			identifier: argument.type
 			count: 4
 			path: resources/views/lists/sources-table.phtml
@@ -10316,6 +10436,12 @@ parameters:
 
 		-
 			rawMessage: 'Parameter #1 $column of method Illuminate\Database\Query\Builder::pluck() expects string, Illuminate\Database\Query\Expression given.'
+			identifier: argument.type
+			count: 2
+			path: resources/views/lists/submitters-table.phtml
+
+		-
+			rawMessage: 'Parameter #1 $input of function array_sum expects an array of values castable to number, array given.'
 			identifier: argument.type
 			count: 2
 			path: resources/views/lists/submitters-table.phtml
