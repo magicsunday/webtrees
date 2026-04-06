@@ -86,21 +86,31 @@
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, "text/html");
 
-        // Append script elements to the end of the body.
-        Array.from(doc.body.childNodes).forEach(node => {
-          if (node.tagName === "SCRIPT") {
-            let script = document.createElement('script');// Copy attributes (src, type, etc.)
+        // Collect script elements for sequential execution.
+        const scripts = Array.from(doc.body.childNodes).filter(node => node.tagName === "SCRIPT");
+
+        // Load scripts sequentially to preserve execution order.
+        // External scripts (with src) must finish loading before the next script executes.
+        let chain = Promise.resolve();
+        scripts.forEach(node => {
+          chain = chain.then(() => new Promise(resolve => {
+            let script = document.createElement('script');
             Array.from(node.attributes).forEach(attr => {
               script.setAttribute(attr.name, attr.value);
             });
             if (node.src) {
               script.src = node.src;
+              script.onload = resolve;
+              script.onerror = resolve;
             } else {
               script.textContent = node.textContent;
             }
             node.remove();
             document.body.appendChild(script);
-          }
+            if (!node.src) {
+              resolve();
+            }
+          }));
         });
       });
   }
