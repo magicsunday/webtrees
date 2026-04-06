@@ -54,7 +54,7 @@
         "illuminate/database": "12.50.0",
         "illuminate/support": "12.50.0",
         "intervention/image": "3.11.6",
-        "league/commonmark": "2.8.0",
+        "league/commonmark": "2.8.2",
         "league/flysystem": "3.31.0",
         "league/flysystem-path-prefixing": "3.31.0",
         "league/flysystem-ziparchive": "3.31.0",
