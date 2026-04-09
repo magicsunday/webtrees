@@ -310,6 +310,13 @@ class UserService
         DB::table('user_gedcom_setting')->where('user_id', '=', $user->id())->delete();
         DB::table('user_setting')->where('user_id', '=', $user->id())->delete();
         DB::table('message')->where('user_id', '=', $user->id())->delete();
+
+        if (DB::driverName() === DB::SQL_SERVER) {
+            // SQL-Server cannot handle these foreign key constraints.
+            DB::table('gedcom')->where('contact_user_id', '=', $user->id())->update(['contact_user_id' => null]);
+            DB::table('gedcom')->where('support_user_id', '=', $user->id())->update(['support_user_id' => null]);
+        }
+
         DB::table('user')->where('user_id', '=', $user->id())->delete();
     }
 
