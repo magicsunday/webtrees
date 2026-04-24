@@ -41,12 +41,15 @@ use function array_diff;
 use function array_intersect;
 use function dirname;
 use function explode;
+use function in_array;
 use function intdiv;
 use function min;
 use function pathinfo;
 use function sha1;
 use function sort;
 use function str_contains;
+use function strpbrk;
+use function strtolower;
 use function strtoupper;
 use function strtr;
 use function trim;
@@ -59,6 +62,25 @@ use const UPLOAD_ERR_OK;
  */
 class MediaFileService
 {
+    // Characters that are not allowed in media filenames.
+    public const string BLOCKED_CHARACTERS = ':';
+
+    // Media files that are images are displayed.  Others (pdf, xls, txt, etc.) are downloaded.
+    // Block files with obvious executable extensions.
+    public const array BLOCKED_EXTENSIONS = [
+        'bash',
+        'bat',
+        'cgi',
+        'com',
+        'exe',
+        'htm',
+        'html',
+        'php',
+        'pl',
+        'sh',
+        'shtml',
+    ];
+
     private const array IGNORE_FOLDERS = [
         // Old versions of webtrees
         'thumbs',
@@ -173,11 +195,28 @@ class MediaFileService
                     $folder .= '/';
                 }
 
+                $tmp = strpbrk($folder . $file, self::BLOCKED_CHARACTERS);
+
+                if ($tmp !== false) {
+                    $message = I18N::translate('Filenames are not allowed to contain the character “%s”.', $tmp[0]);
+                    FlashMessages::addMessage($message);
+
+                    return '';
+                }
+
+                $extension = pathinfo($file, PATHINFO_EXTENSION);
+
+                if (in_array(strtolower($extension), self::BLOCKED_EXTENSIONS, true)) {
+                    $message = I18N::translate('Filenames are not allowed to have the extension “%s”.', $extension);
+                    FlashMessages::addMessage($message);
+
+                    return '';
+                }
+
                 // Generate a unique name for the file?
                 if ($auto === '1' || $tree->mediaFilesystem()->fileExists($folder . $file)) {
-                    $folder    = '';
-                    $extension = pathinfo($uploaded_file->getClientFilename(), PATHINFO_EXTENSION);
-                    $file      = sha1((string) $uploaded_file->getStream()) . '.' . $extension;
+                    $folder = '';
+                    $file   = sha1((string) $uploaded_file->getStream()) . '.' . $extension;
                 }
 
                 try {
