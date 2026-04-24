@@ -19,14 +19,23 @@ declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Factories;
 
+use Fisharebest\Webtrees\Services\PhpService;
 use Fisharebest\Webtrees\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ImageFactory::class)]
 class ImageFactoryTest extends TestCase
 {
-    public function testClass(): void
+    public function testReplacementImageResponseSetsContentSecurityPolicyHeader(): void
     {
-        self::assertTrue(class_exists(ImageFactory::class));
+        $php_service   = $this->createStub(PhpService::class);
+        $image_factory = new ImageFactory($php_service);
+        $response      = $image_factory->replacementImageResponse('404');
+
+        self::assertSame('image/svg+xml', $response->getHeaderLine('content-type'));
+        self::assertSame(
+            'default-src none',
+            $response->getHeaderLine('content-security-policy'),
+        );
     }
 }

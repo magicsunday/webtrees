@@ -260,9 +260,9 @@ class ImageFactory implements ImageFactoryInterface
         $svg = view(name: 'errors/image-svg', data: ['status' => $text]);
 
         // We can't send the actual status code, as browsers won't show images with 4xx/5xx.
-        return response(content: $svg, code: StatusCodeInterface::STATUS_OK, headers: [
-            'content-type' => 'image/svg+xml',
-        ]);
+        return response(content: $svg)
+            ->withHeader('content-type', 'image/svg+xml')
+            ->withHeader('content-security-policy', 'default-src none');
     }
 
     protected function imageResponse(string $data, string $mime_type, string $filename): ResponseInterface
@@ -272,10 +272,10 @@ class ImageFactory implements ImageFactoryInterface
                 ->withHeader('x-image-exception', 'SVG image blocked due to XSS.');
         }
 
-        // HTML files may contain javascript and iframes, so use content-security-policy to disable them.
+        // HTML files may contain JavaScript and iframes, so use content-security-policy to disable them.
         $response = response($data)
             ->withHeader('content-type', $mime_type)
-            ->withHeader('content-security-policy', 'script-src none;frame-src none');
+            ->withHeader('content-security-policy', 'default-src none');
 
         if ($filename === '') {
             return $response;
