@@ -77,10 +77,14 @@ readonly class EditFactAction implements RequestHandlerInterface
             }
         }
 
-        if ($fact_id === 'new') {
-            $record->createFact($gedcom, !$keep_chan);
-        } else {
-            $record->updateFact($fact_id, $gedcom, !$keep_chan);
+        if ($gedcom !== '') {
+            if ($fact_id === 'new') {
+                $record->createFact($gedcom, !$keep_chan);
+            } else {
+                $record->updateFact($fact_id, $gedcom, !$keep_chan);
+            }
+        } elseif ($fact_id !== 'new') {
+            $record->deleteFact($fact_id, !$keep_chan);
         }
 
         $url = Validator::parsedBody($request)->isLocalUrl()->string('url', $record->url());
