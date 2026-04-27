@@ -80,7 +80,7 @@ class ModuleAction implements RequestHandlerInterface
         $method = $verb . $action . 'Action';
 
         // Actions with "Admin" in the name are for administrators only.
-        if (str_contains($action, 'Admin') && !Auth::isAdmin($user)) {
+        if (str_contains(strtolower($action), 'admin') && !Auth::isAdmin($user)) {
             throw new HttpAccessDeniedException('Admin only action');
         }
 
