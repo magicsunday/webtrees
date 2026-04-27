@@ -324,7 +324,7 @@ final class SetupWizard implements RequestHandlerInterface
             $admin->setPreference(UserInterface::PREF_LANGUAGE, $data['lang']);
             $admin->setPreference(UserInterface::PREF_IS_VISIBLE_ONLINE, '1');
         } else {
-            $admin->setPassword($_POST['wtpass']);
+            $admin->setPassword($data['wtpass']);
         }
         // Make the user an administrator
         $admin->setPreference(UserInterface::PREF_IS_ADMINISTRATOR, '1');
