@@ -41,7 +41,7 @@ class CensusColumnNationalityTest extends TestCase
 
     public function testNoBirthPlace(): void
     {
-        $individual = self::createStub(Individual::class);
+        $individual = $this->createMock(Individual::class);
         $individual->method('getBirthPlace')->willReturn($this->getPlaceMock(''));
         $individual->method('facts')->with(['IMMI', 'EMIG', 'NATU'], true)->willReturn(new Collection());
 
@@ -55,7 +55,7 @@ class CensusColumnNationalityTest extends TestCase
 
     public function testPlaceCountry(): void
     {
-        $individual = self::createStub(Individual::class);
+        $individual = $this->createMock(Individual::class);
         $individual->method('getBirthPlace')->willReturn($this->getPlaceMock('Australia'));
         $individual->method('facts')->with(['IMMI', 'EMIG', 'NATU'], true)->willReturn(new Collection());
 
@@ -69,7 +69,7 @@ class CensusColumnNationalityTest extends TestCase
 
     public function testBritish(): void
     {
-        $individual = self::createStub(Individual::class);
+        $individual = $this->createMock(Individual::class);
         $individual->method('getBirthPlace')->willReturn($this->getPlaceMock('London, England'));
         $individual->method('facts')->with(['IMMI', 'EMIG', 'NATU'], true)->willReturn(new Collection());
 
@@ -97,7 +97,7 @@ class CensusColumnNationalityTest extends TestCase
         $fact2->method('place')->willReturn($place2);
         $fact2->method('date')->willReturn(new Date('1865'));
 
-        $individual = self::createStub(Individual::class);
+        $individual = $this->createMock(Individual::class);
         $individual->method('getBirthPlace')->willReturn($this->getPlaceMock('London, England'));
         $individual->method('facts')->with(['IMMI', 'EMIG', 'NATU'], true)->willReturn(new Collection([
             $fact1,

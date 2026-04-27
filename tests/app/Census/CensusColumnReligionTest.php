@@ -47,7 +47,7 @@ class CensusColumnReligionTest extends TestCase
 
     public function testRecordReligion(): void
     {
-        $individual = self::createStub(Individual::class);
+        $individual = $this->createMock(Individual::class);
         $fact       = self::createStub(Fact::class);
         $fact->method('value')->willReturn('Jedi');
         $individual->method('facts')->with(['RELI'])->willReturn(new Collection([$fact]));
@@ -62,7 +62,7 @@ class CensusColumnReligionTest extends TestCase
     public function testEventReligion(): void
     {
         $individual = $this->createMock(Individual::class);
-        $fact       = self::createStub(Fact::class);
+        $fact       = $this->createMock(Fact::class);
         $fact->method('attribute')->with('RELI')->willReturn('Jedi');
         $individual
             ->expects($this->exactly(2))

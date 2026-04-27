@@ -39,10 +39,10 @@ class AuthModeratorTest extends TestCase
         $handler = self::createStub(RequestHandlerInterface::class);
         $handler->method('handle')->willReturn(response('lorem ipsum'));
 
-        $user = self::createStub(User::class);
+        $user = $this->createMock(User::class);
         $user->method('getPreference')->with(UserInterface::PREF_IS_ADMINISTRATOR)->willReturn('');
 
-        $tree = self::createStub(Tree::class);
+        $tree = $this->createMock(Tree::class);
         $tree->method('getUserPreference')->with($user, UserInterface::PREF_TREE_ROLE)->willReturn(UserInterface::ROLE_MODERATOR);
 
         $request    = self::createRequest()->withAttribute('tree', $tree)->withAttribute('user', $user);
@@ -61,10 +61,10 @@ class AuthModeratorTest extends TestCase
         $handler = self::createStub(RequestHandlerInterface::class);
         $handler->method('handle')->willReturn(response('lorem ipsum'));
 
-        $user = self::createStub(User::class);
+        $user = $this->createMock(User::class);
         $user->method('getPreference')->with(UserInterface::PREF_IS_ADMINISTRATOR)->willReturn('');
 
-        $tree = self::createStub(Tree::class);
+        $tree = $this->createMock(Tree::class);
         $tree->method('getUserPreference')->with($user, UserInterface::PREF_TREE_ROLE)->willReturn(UserInterface::ROLE_EDITOR);
 
         $request    = self::createRequest()->withAttribute('tree', $tree)->withAttribute('user', $user);

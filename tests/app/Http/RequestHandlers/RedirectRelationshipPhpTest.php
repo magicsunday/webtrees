@@ -100,7 +100,7 @@ class RedirectRelationshipPhpTest extends TestCase
             ->method('all')
             ->willReturn(new Collection(['tree1' => $tree]));
 
-        $module_service = self::createStub(ModuleService::class);
+        $module_service = $this->createMock(ModuleService::class);
         $module_service
             ->method('findByComponent')
             ->with(ModuleChartInterface::class, $tree, new GuestUser())

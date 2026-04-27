@@ -333,7 +333,7 @@ class ValidatorTest extends TestCase
 
     public function testIsLocalUrlParameter(): void
     {
-        $request = self::createStub(ServerRequestInterface::class);
+        $request = $this->createMock(ServerRequestInterface::class);
         $request
             ->method('getAttribute')
             ->with('base_url')->willReturn('http://example.local/wt');
@@ -347,7 +347,7 @@ class ValidatorTest extends TestCase
 
     public function testIsLocalUrlParameterWrongScheme(): void
     {
-        $request = self::createStub(ServerRequestInterface::class);
+        $request = $this->createMock(ServerRequestInterface::class);
         $request
             ->method('getAttribute')
             ->with('base_url')
@@ -363,7 +363,7 @@ class ValidatorTest extends TestCase
 
     public function testIsLocalUrlParameterWrongDomain(): void
     {
-        $request = self::createStub(ServerRequestInterface::class);
+        $request = $this->createMock(ServerRequestInterface::class);
         $request
             ->method('getAttribute')
             ->with('base_url')

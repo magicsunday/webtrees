@@ -63,7 +63,7 @@ class CensusColumnConditionFrenchVeuveTest extends TestCase
 
     public function testNoFamilyFactsMale(): void
     {
-        $family = self::createStub(Family::class);
+        $family = $this->createMock(Family::class);
         $family->method('getMarriageDate')->willReturn(new Date(''));
         $family->method('facts')->with(['MARR'])->willReturn(new Collection());
 
@@ -82,7 +82,7 @@ class CensusColumnConditionFrenchVeuveTest extends TestCase
 
     public function testNoFamilyFactsFemale(): void
     {
-        $family = self::createStub(Family::class);
+        $family = $this->createMock(Family::class);
         $family->method('getMarriageDate')->willReturn(new Date(''));
         $family->method('facts')->with(['MARR'])->willReturn(new Collection());
 
@@ -163,7 +163,7 @@ class CensusColumnConditionFrenchVeuveTest extends TestCase
 
     public function testNoFamilyUnmarriedMale(): void
     {
-        $family = self::createStub(Family::class);
+        $family = $this->createMock(Family::class);
         $family->method('getMarriageDate')->willReturn(new Date(''));
         $family->method('facts')->with(['MARR'])->willReturn(new Collection());
 
@@ -182,7 +182,7 @@ class CensusColumnConditionFrenchVeuveTest extends TestCase
 
     public function testNoFamilyUnmarriedFemale(): void
     {
-        $family = self::createStub(Family::class);
+        $family = $this->createMock(Family::class);
         $family->method('getMarriageDate')->willReturn(new Date(''));
         $family->method('facts')->with(['MARR'])->willReturn(new Collection());
 
@@ -201,7 +201,7 @@ class CensusColumnConditionFrenchVeuveTest extends TestCase
 
     public function testChildMale(): void
     {
-        $family = self::createStub(Family::class);
+        $family = $this->createMock(Family::class);
         $family->method('getMarriageDate')->willReturn(new Date(''));
         $family->method('facts')->with(['MARR'])->willReturn(new Collection());
 
@@ -220,7 +220,7 @@ class CensusColumnConditionFrenchVeuveTest extends TestCase
 
     public function testChildFemale(): void
     {
-        $family = self::createStub(Family::class);
+        $family = $this->createMock(Family::class);
         $family->method('getMarriageDate')->willReturn(new Date(''));
         $family->method('facts')->with(['MARR'])->willReturn(new Collection());
 

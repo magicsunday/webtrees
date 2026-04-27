@@ -36,7 +36,7 @@ class CensusColumnAgeMarriedTest extends TestCase
         $fact = self::createStub(Fact::class);
         $fact->method('date')->willReturn(new Date('01 DEC 1859'));
 
-        $family = self::createStub(Family::class);
+        $family = $this->createMock(Family::class);
         $family->method('facts')->with(['MARR'], true)->willReturn(new Collection([$fact]));
 
         $individual = self::createStub(Individual::class);
@@ -67,7 +67,7 @@ class CensusColumnAgeMarriedTest extends TestCase
 
     public function testNoMarriage(): void
     {
-        $family = self::createStub(Family::class);
+        $family = $this->createMock(Family::class);
         $family->method('facts')->with(['MARR'])->willReturn(new Collection());
 
         $individual = self::createStub(Individual::class);

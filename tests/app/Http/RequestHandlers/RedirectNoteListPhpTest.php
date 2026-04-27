@@ -86,8 +86,9 @@ class RedirectNoteListPhpTest extends TestCase
             ->method('all')
             ->willReturn(new Collection(['tree1' => $tree]));
 
-        $module_service = self::createStub(ModuleService::class);
+        $module_service = $this->createMock(ModuleService::class);
         $module_service
+            ->expects($this->once())
             ->method('findByComponent')
             ->with(ModuleListInterface::class, $tree, new GuestUser())
             ->willReturn(new Collection());

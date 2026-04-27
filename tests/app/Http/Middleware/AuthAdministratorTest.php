@@ -38,7 +38,7 @@ class AuthAdministratorTest extends TestCase
         $handler = self::createStub(RequestHandlerInterface::class);
         $handler->method('handle')->willReturn(response('lorem ipsum'));
 
-        $user = self::createStub(User::class);
+        $user = $this->createMock(User::class);
         $user->method('getPreference')->with(UserInterface::PREF_IS_ADMINISTRATOR)->willReturn('1');
 
         $request    = self::createRequest()->withAttribute('user', $user);
@@ -57,7 +57,7 @@ class AuthAdministratorTest extends TestCase
         $handler = self::createStub(RequestHandlerInterface::class);
         $handler->method('handle')->willReturn(response('lorem ipsum'));
 
-        $user = self::createStub(User::class);
+        $user = $this->createMock(User::class);
         $user->method('getPreference')->with(UserInterface::PREF_IS_ADMINISTRATOR)->willReturn('');
 
         $request    = self::createRequest()->withAttribute('user', $user);

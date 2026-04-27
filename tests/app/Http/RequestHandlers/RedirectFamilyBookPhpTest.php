@@ -87,7 +87,7 @@ class RedirectFamilyBookPhpTest extends TestCase
 
     public function testModuleDisabled(): void
     {
-        $module_service = self::createStub(ModuleService::class);
+        $module_service = $this->createMock(ModuleService::class);
         $module_service
             ->method('findByComponent')
             ->with(ModuleChartInterface::class)
