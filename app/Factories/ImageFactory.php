@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace Fisharebest\Webtrees\Factories;
 
+use DOMDocument;
+use DOMElement;
 use Fig\Http\Message\StatusCodeInterface;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Contracts\ImageFactoryInterface;
@@ -47,11 +49,17 @@ use function addcslashes;
 use function basename;
 use function get_class;
 use function implode;
+use function libxml_clear_errors;
+use function libxml_use_internal_errors;
 use function pathinfo;
+use function preg_replace;
 use function response;
-use function str_contains;
+use function str_starts_with;
+use function stripos;
+use function strtolower;
 use function view;
 
+use const LIBXML_NONET;
 use const PATHINFO_EXTENSION;
 
 class ImageFactory implements ImageFactoryInterface
@@ -63,6 +71,15 @@ class ImageFactory implements ImageFactoryInterface
     protected const string WATERMARK_FILE = 'resources/img/watermark.png';
 
     protected const int THUMBNAIL_CACHE_TTL = 8640000;
+
+    private const array DANGEROUS_SVG_TAGS = [
+        'script',
+        'foreignobject',
+        'iframe',
+        'object',
+        'embed',
+        'handler',
+    ];
 
     public const array SUPPORTED_FORMATS = [
         'image/jpeg' => 'jpg',
@@ -267,9 +284,16 @@ class ImageFactory implements ImageFactoryInterface
 
     protected function imageResponse(string $data, string $mime_type, string $filename): ResponseInterface
     {
-        if ($mime_type === 'image/svg+xml' && str_contains(haystack: $data, needle: '<script')) {
-            return $this->replacementImageResponse(text: 'XSS')
-                ->withHeader('x-image-exception', 'SVG image blocked due to XSS.');
+        if ($mime_type === 'image/svg+xml') {
+            if (!$this->php_service->extensionLoaded(extension: 'dom')) {
+                return $this->replacementImageResponse(text: 'DOM')
+                    ->withHeader('x-image-exception', 'Need the PHP dom extension to verify SVG files.');
+            }
+
+            if ($this->svgContainsActiveContent(data: $data)) {
+                return $this->replacementImageResponse(text: 'XSS')
+                    ->withHeader('x-image-exception', 'SVG image blocked due to XSS.');
+            }
         }
 
         // HTML files may contain JavaScript and iframes, so use content-security-policy to disable them.
@@ -282,7 +306,69 @@ class ImageFactory implements ImageFactoryInterface
         }
 
         return $response
-            ->withHeader('content-disposition', 'attachment; filename="' . addcslashes(string: basename(path: $filename), characters: '"'));
+            ->withHeader('content-disposition', 'attachment; filename="' . addcslashes(string: basename(path: $filename), characters: '"') . '"');
+    }
+
+    /**
+     * Determine whether an SVG document contains active content (script elements,
+     * event-handler attributes, javascript: URLs) that could execute in a browser.
+     *
+     * Although we have a content-security-policy to disable scripts, a user may
+     * download this file and distribute it, so better to block it.
+     */
+    private function svgContainsActiveContent(string $data): bool
+    {
+        $previous_error_state = libxml_use_internal_errors(true);
+
+        try {
+            $document = new DOMDocument();
+            // LIBXML_NONET disables network access so external DTDs and entities
+            // cannot be fetched — mitigates XXE/SSRF on malformed payloads.
+            $loaded = $document->loadXML($data, LIBXML_NONET);
+
+            if ($loaded === false || !$document->documentElement instanceof DOMElement) {
+                // Malformed SVG — treat conservatively and block.
+                return true;
+            }
+
+            return $this->svgElementIsDangerous($document->documentElement);
+        } finally {
+            libxml_clear_errors();
+            libxml_use_internal_errors($previous_error_state);
+        }
+    }
+
+    private function svgElementIsDangerous(DOMElement $element): bool
+    {
+        if (in_array(strtolower($element->localName), self::DANGEROUS_SVG_TAGS, true)) {
+            return true;
+        }
+
+        foreach ($element->attributes as $attribute) {
+            $name = strtolower($attribute->nodeName);
+
+            // Event-handler attributes such as "onload"
+            if (str_starts_with($name, 'on')) {
+                return true;
+            }
+
+            // Normalize whitespace to catch malformed values that browsers might accept,
+            // such as "java\tscript:".
+            $value         = (string) $attribute->nodeValue;
+            $value_compact = preg_replace('/\s+/', '', $value) ?? '';
+
+            if (str_starts_with(strtolower($value_compact), 'javascript:')) {
+                return true;
+            }
+        }
+
+        foreach ($element->childNodes as $child) {
+            if ($child instanceof DOMElement && $this->svgElementIsDangerous(element: $child)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function imageManager(): ImageManager
