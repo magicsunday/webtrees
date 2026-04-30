@@ -1004,10 +1004,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
   // Datatables - locale-aware sorting
-  jQuery.extend(jQuery.fn.dataTable.ext.oSort, {
-    'text-asc': (x, y) => x.localeCompare(y, document.documentElement.lang, { sensitivity: 'base' }),
-    'text-desc': (x, y) => y.localeCompare(x, document.documentElement.lang, { sensitivity: 'base' }),
-  });
+  DataTable.ext.oSort['text-asc'] = (x, y) => x.localeCompare(y, document.documentElement.lang, { sensitivity: 'base' });
+  DataTable.ext.oSort['text-desc'] = (x, y) => y.localeCompare(x, document.documentElement.lang, { sensitivity: 'base' });
 
   // DataTables - start hidden to prevent FOUC.
   document.querySelectorAll('table.datatables').forEach(function (element) {
@@ -1021,17 +1019,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Activate the on-screen keyboard
   let osk_focus_element;
-  $('.wt-osk-trigger').click(function () {
+  $('.wt-osk-trigger').on('click', function () {
     // When a user clicks the icon, set focus to the corresponding input
     osk_focus_element = document.getElementById(this.dataset.wtId);
     osk_focus_element.focus();
     $('.wt-osk').show();
   });
-  $('.wt-osk-script-button').change(function () {
+  $('.wt-osk-script-button').on('change', function () {
     $('.wt-osk-script').prop('hidden', true);
     $('.wt-osk-script-' + this.dataset.wtOskScript).prop('hidden', false);
   });
-  $('.wt-osk-shift-button').click(function () {
+  $('.wt-osk-shift-button').on('click', function () {
     document.querySelector('.wt-osk-keys').classList.toggle('shifted');
   });
   $('.wt-osk-keys').on('click', '.wt-osk-key', function () {
